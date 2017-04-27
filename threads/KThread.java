@@ -204,6 +204,7 @@ public class KThread {
 		currentThread.status = statusFinished;
 
 		sleep();
+		
 	}
 
 	/**
@@ -282,13 +283,10 @@ public class KThread {
 	 */
 	public void join() {
 		Lib.debug(dbgThread, "Joining to thread: " + toString());
-
 		Lib.assertTrue(this != currentThread);
                 
                 if( this.status == statusFinished ) return;
-                
                 currentThread.sleep();
-                // Should be all good
                 this.finish();
 	}
 

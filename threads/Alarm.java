@@ -29,7 +29,19 @@ public class Alarm {
 	 * should be run.
 	 */
 	public void timerInterrupt() {
-		KThread.currentThread().yield();
+		
+		// Original Starter code
+		//KThread.currentThread().yield();
+
+		//disable interupts
+
+		// Not sure if this is the correct stuff
+		for(SleepingThread sThread: list){
+			if(Machine.timer().getTime() >= sThread.time)
+				sThread.thread.ready();
+		}
+		
+		//enable interupts
 	}
 
 	/**
@@ -45,10 +57,22 @@ public class Alarm {
 	 * @see nachos.machine.Timer#getTime()
 	 */
 	public void waitUntil(long x) {
-		// for now, cheat just to get something working (busy waiting is bad)
-		//long wakeTime = Machine.timer().getTime() + x;
-		//while (wakeTime > Machine.timer().getTime())
+		//for now, cheat just to get something working (busy waiting is bad)
+		
+		long wakeTime = Machine.timer().getTime() + x;
+		Kthread.currentThread().sleep();
+		SleepingThread sThread = new SleepingThread(wakeTime, Kthread.currentThread());
+		
+		// Original starter code
+		// while (wakeTime > Machine.timer().getTime())
 		//	KThread.yield();
 		
 	}
+
+	private static SleepingThread(long time_arg, Kthread thread_arg){
+		long time = time_arg;
+		Kthread thread = thread_arg;
+	}
+	
+	List<SleepingThread> list;
 }
