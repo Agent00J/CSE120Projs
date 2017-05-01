@@ -204,6 +204,14 @@ public class KThread {
 		currentThread.status = statusFinished;
 
 		sleep();
+
+		//J's attempt : I saved the original thread and ready it
+		//here once the other thread finishes
+		// I feel that since we are manipulting a shared global variable
+		// we need to lock it. I'm not sure, what are your thoughts?
+		//lock
+		//origThread.ready
+		//unlock
 		
 	}
 
@@ -284,10 +292,14 @@ public class KThread {
 	public void join() {
 		Lib.debug(dbgThread, "Joining to thread: " + toString());
 		Lib.assertTrue(this != currentThread);
-                
+		
+		origThread = currentThread;
                 if( this.status == statusFinished ) return;
                 currentThread.sleep();
                 this.finish();
+		// Need to wake up original thread
+		// Waking up old thread needs to be done in finish()
+		// Old thread is saved as a global variable called origThread
 	}
 
 	/**
@@ -464,6 +476,8 @@ public class KThread {
 	private static ThreadQueue readyQueue = null;
 
 	private static KThread currentThread = null;
+
+	private static KThread origThread = null;
 
 	private static KThread toBeDestroyed = null;
 

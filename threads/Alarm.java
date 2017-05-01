@@ -36,8 +36,8 @@ public class Alarm {
 		//disable interupts
 
 		// Not sure if this is the correct stuff
-		for(SleepingThread sThread: list){
-			if(Machine.timer().getTime() >= sThread.time)
+		for(KThread sleepThread : list ){
+			if(Machine.timer().getTime() >= sleepThread.time)
 				sThread.thread.ready();
 		}
 		
